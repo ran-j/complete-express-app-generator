@@ -26,7 +26,7 @@ var users = require('./routes/users');
 // =================================================
 
 global.config = require('./bin/config')
-global.debug = require('debug')('appName:server');
+global.debug = require('debug')('<%- name %>:server');
 global.Home = __dirname;
 
 // =================================================

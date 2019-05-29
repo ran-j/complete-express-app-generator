@@ -6,7 +6,7 @@
 
 var app = require('../app');
 var cluster = require('cluster');
-var debug = require('debug')('appName:server');
+var debug = require('debug')('<%- name %>:server');
 var http = require('http');
 var numCPUs = require('os').cpus().length;
 
@@ -48,6 +48,15 @@ if (cluster.isMaster) {
   server.listen(port);
   server.on('error', onError);
   server.on('listening', onListening);
+  <% if (useIO) { -%>
+    /**
+     * Socket.io
+     */
+    var socketApi = require('../SocketsApi/SocketApi');
+    var io = socketApi.io;
+    io.attach(server);
+    
+  <% } -%> 
 }
 
 // The rest of the bin/www file.....

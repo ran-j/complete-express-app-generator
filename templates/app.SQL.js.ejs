@@ -22,7 +22,7 @@ var index = require('./routes/index');
 // =================================================
 
 global.config = require('./bin/config')
-global.debug = require('debug')('appName:server');
+global.debug = require('debug')('<%- name %>:server');
 global.connection = require("./db/index")
 global.Home = __dirname;
 

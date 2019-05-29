@@ -56,7 +56,7 @@ func.before(program, 'unknownOption', function () {
 program
   .name('express')
   .version(VERSION, '    --version')
-  .usage('[options] [dir]')
+  .usage('[options] [project name]')
   .option('-s, --stack <Stack id>', 'express app with a stack below')
   .option('    --mgnc', 'express mongoose no cluster', func.renamedOption('--mgnc', '--stack=1'))
   .option('    --mgwc', 'express mongoose with cluster', func.renamedOption('--mgwc', '--stack=2'))

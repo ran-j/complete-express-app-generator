@@ -1,3 +1,4 @@
+var ejs = require('ejs')
 var mkdirp = require('mkdirp')
 var fs = require('fs')
 var path = require('path')
@@ -125,6 +126,22 @@ const launchedFromCmd = () => {
   return process.platform === 'win32' && process.env._ === undefined
 }
 
+const loadTemplate = (name) => {
+  var contents = fs.readFileSync(path.join(__dirname, '..', 'templates', (name + '.ejs')), 'utf-8')
+  var locals = Object.create(null)
+
+  function render() {
+    return ejs.render(contents, locals, {
+      escape: util.inspect
+    })
+  }
+
+  return {
+    locals: locals,
+    render: render
+  }
+}
+
 const createApplication = (name, dir, stage, useIO) => {
   // return console.log(TEMPLATE_DIR);
   // Package
@@ -133,7 +150,8 @@ const createApplication = (name, dir, stage, useIO) => {
     version: '0.0.1',
     private: true,
     scripts: {
-      start: 'node ./bin/www'
+      start: 'node ./bin/www',
+      dev : `SET DEBUG=${name}:* & npm start`
     },
     dependencies: {
       'debug': '~2.6.9',
@@ -185,7 +203,10 @@ const createApplication = (name, dir, stage, useIO) => {
   copyTemplate('gitignore', path.join(dir, '.gitignore'))
   //bin
   copyTemplateMulti('bin', dir + '/bin', '*.js')
-  copyTemplate('bin/www', path.join(dir, 'bin/www'))
+
+  var app = null
+  var www = null
+  var config = null
 
   if (useIO) {
     pkg.dependencies["socket.io"] = "^2.2.0"
@@ -205,14 +226,48 @@ const createApplication = (name, dir, stage, useIO) => {
     //models
     copyTemplateMulti('models', dir + '/models', '*.js')
     copyTemplateMulti('Middlewares', dir + '/Middlewares', '*.js')
-    copyTemplate('app.js', path.join(dir, 'app.js'))
+
+    app = loadTemplate('app.js')
+    www = loadTemplate(stage == 2 ? 'bin/wwwCluster' : 'bin/www')
+    config = loadTemplate("bin/config.js")
+
+    app.locals.useIO = useIO
+    app.locals.name = name
+
+    www.locals.useIO = useIO
+    www.locals.name = name
+
+    config.locals.name = name
+    config.locals.mongo = true
+
+    write(path.join(dir, 'app.js'), app.render())
+    write(path.join(dir, 'bin/www'), www.render(), MODE_0755)
+    write(path.join(dir, 'bin/config.js'), config.render(), MODE_0755)
+
     copyTemplate('db/mongo.js', path.join(dir, 'db/index.js'))
   } else {
     pkg.dependencies["mysql"] = "^2.17.1"
-    copyTemplate('app.SQL.js', path.join(dir, 'app.js'))
+
+    app = loadTemplate('app.SQL.js')
+    www = loadTemplate(stage == 4 ? 'bin/wwwCluster' : 'bin/www')
+    config = loadTemplate("bin/config.js")
+
+    app.locals.useIO = useIO
+    app.locals.name = name
+
+    www.locals.useIO = useIO
+    www.locals.name = name
+
+    config.locals.name = name
+    config.locals.mongo = false
+
+    write(path.join(dir, 'app.js'), app.render())
+    write(path.join(dir, 'bin/www'), www.render(), MODE_0755)
+    write(path.join(dir, 'bin/config.js'), config.render(), MODE_0755)
+
     copyTemplate('db/mysql.js', path.join(dir, 'db/index.js'))
   }
-  
+
   //sort objects
   pkg.dependencies = sortedNPM(pkg.dependencies)
 
@@ -231,12 +286,10 @@ const createApplication = (name, dir, stage, useIO) => {
   console.log('     %s npm install', prompt)
   console.log()
   console.log('   run the app:')
-
-  if (launchedFromCmd()) {
-    console.log('     %s SET DEBUG=%s:* & npm start', prompt, name)
-  } else {
-    console.log('     %s DEBUG=%s:* npm start', prompt, name)
-  }
+  console.log('     npm start')
+  console.log()
+  console.log('   run the app as dev:')
+  console.log('     npm run dev')
 
   console.log()
 

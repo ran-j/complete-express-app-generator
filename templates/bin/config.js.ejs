@@ -1,0 +1,17 @@
+// config.js
+module.exports = {
+    'cookies': {name : '<%- name %>', secret: '1234'},
+    'proxyRequest': {useproxy: false, user:'', pass: '', host: ''},
+    <% if (mongo) { -%>
+'mongoConfig': {useAuth: false, url: 'mongodb://localhost:27017/<%- name %>', user: '', pass: ''},
+    <% } else { -%>
+'sqlConfig' : {
+        host     : 'localhost',
+        user     : 'admin',
+        password : 'admin',
+        database : '<%- name %>',
+        port : 13306,
+    },
+    <% } -%>
+'secret' : '1234'
+};
