@@ -7,7 +7,7 @@
 
 ## Quick Start
 
-Based on [express-generator'](https://github.com/expressjs/generator). , this is a complete "basic" app generator.
+Based on [express-generator'](https://github.com/expressjs/generator), this is a complete "basic" app generator.
 
 Create a basic app with mongoose and no Cluster and no socket IO:
 
