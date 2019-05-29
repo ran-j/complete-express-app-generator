@@ -7,12 +7,12 @@
 
 ## Quick Start
 
-Base on express-generator, this is a complete "basic" app
+Based on [express-generator'](https://github.com/expressjs/generator). , this is a complete "basic" app generator.
 
-Create the app:
+Create a basic app with mongoose and no Cluster and no socket IO:
 
 ```bash
-$ .\bin\ran-cli.js --mgnc "app name"
+$ ran --mgnc "app name"
 ```
 
 Install dependencies:
