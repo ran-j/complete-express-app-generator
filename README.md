@@ -38,7 +38,7 @@ This generator can also be further configured with the following command line fl
 
         Options:
               --version           output the version number
-          -s, --stack <Stack id>  express mongoose no cluster
+          -s, --stack <Stack id>  express app with a stack below
               --mgnc              express mongoose no cluster
               --mgwc              express mongoose with cluster
               --msnc              express mySQL no cluster
