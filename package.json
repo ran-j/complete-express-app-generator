@@ -1,11 +1,11 @@
 {
   "name": "ran-express-genertor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "bin/ran-cli",
   "preferGlobal": true,
   "bin": {
-    "ran": "./bin/ran-cli"
+    "ran": "./bin/ran-cli.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
