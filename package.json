@@ -17,8 +17,21 @@
     "bin/",
     "templates/"
   ],
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "express",
+    "framework",
+    "sinatra",
+    "web",
+    "rest",
+    "restful",
+    "router",
+    "app",
+    "generator",
+    "mongoose",
+    "sql"
+  ],
+  "repository" : "ran-j/complete-express-app-generator",
+  "author": "Ranieri <ran-junior@hotmail.com>",
   "license": "ISC",
   "dependencies": {
     "commander": "^2.20.0",
