@@ -4,6 +4,9 @@
 
 ## Installation
 
+```sh
+$ npm install -g ran-express-genertor
+```
 
 ## Quick Start
 
