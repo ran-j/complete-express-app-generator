@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var ejs = require('ejs')
 var mkdirp = require('mkdirp')
 var fs = require('fs')
