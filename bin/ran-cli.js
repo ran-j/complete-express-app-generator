@@ -56,7 +56,7 @@ func.before(program, 'unknownOption', function () {
 })
 
 program
-  .name('express')
+  .name('ran')
   .version(VERSION, '    --version')
   .usage('[options] [project name]')
   .option('-s, --stack <Stack id>', 'express app with a stack below')
