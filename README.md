@@ -34,7 +34,7 @@ $ npm start
 
 This generator can also be further configured with the following command line flags.
 
-        Usage: express [options] [dir]
+        Usage: ran [options] [dir]
 
         Options:
               --version           output the version number
