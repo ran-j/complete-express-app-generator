@@ -156,7 +156,8 @@ const createApplication = (name, dir, stage, useIO) => {
       dev : `SET DEBUG=${name}:* & npm start`
     },
     dependencies: {
-      'debug': '~2.6.9',
+      "bcrypt": "^3.0.6",
+      "debug": "~2.6.9",
       "ejs": "~2.5.7",
       'express': '~4.16.1',
       "express-session": "^1.15.6",
