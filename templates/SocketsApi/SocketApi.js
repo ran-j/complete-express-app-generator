@@ -23,7 +23,6 @@ io.use(jwtAuth.authenticate({
     }
 }));
 
-
 /**
  * Enable metrics middleware
  */
@@ -31,7 +30,7 @@ io.use(jwtAuth.authenticate({
 ioMetrics(io);
 
 // =================================================
-//  Functions
+//  Exports add IO
 // =================================================
 
 socketApi.io = io;
@@ -43,5 +42,13 @@ socketApi.io = io;
 io.on('connection', (socket) => {
     console.log('A user connected');
 });
+
+// =================================================
+//  Functions
+// =================================================
+
+socketApi.sendNotification = function(data) {
+    io.sockets.emit('notify', { msg: data });
+}
 
 module.exports = socketApi;
