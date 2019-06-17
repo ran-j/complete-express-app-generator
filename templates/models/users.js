@@ -30,7 +30,9 @@ UserSchema.statics.authenticate = (matricula, password, callback) => {
     }
     bcrypt.compare(password, user.password, (err, result) => {
       if (result === true) return callback(null, user);
-      return callback();
+      var err = new Error('Bad password or login');
+      err.status = 403;
+      return callback(err);
     })
   });
 }
@@ -44,9 +46,15 @@ UserSchema.statics.changepwd = (userId, pwd, callback) => {
       err.status = 401;
       return callback(err);
     } else {
-      ActualUser.password = pwd;
-      ActualUser.save();
-      return callback(null, 1);
+      bcrypt.hash(pwd, 10, function (err, hash) {
+        if (err) {
+          return next(err);
+        }
+        ActualUser.password = hash;
+        ActualUser.save().then((nModel) => {
+          callback(null, nModel);
+        });
+      })
     }
   });
 }
@@ -71,13 +79,17 @@ UserSchema.statics.getToken = (userId, callback) => {
 
 UserSchema.pre('save', function (next) {
   var user = this;
-  bcrypt.hash(user.password, 10, (err, hash) => {
-    if (err) {
-      return next(err);
-    }
-    user.password = hash;
+  if (user.isNew) {
+    bcrypt.hash(user.password, 10, (err, hash) => {
+      if (err) {
+        return next(err);
+      }
+      user.password = hash;
+      next();
+    })
+  } else {
     next();
-  })
+  }
 });
 
 var Users = mongoose.model('Users', UserSchema);

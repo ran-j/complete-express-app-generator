@@ -211,6 +211,21 @@ const createApplication = (name, dir, stage, useIO) => {
   var www = null
   var config = null
 
+
+  var pmconfig = `module.exports = {
+    apps : [
+        {
+          name: ${name},
+          script: "./bin/www",
+          watch: true,
+          env: {
+              "PORT": 5000,
+              "NODE_ENV": "production"
+          }
+        }
+    ]
+  }`
+ 
   if (useIO) {
     pkg.dependencies["socket.io"] = "^2.2.0"
     pkg.dependencies["socket.io-prometheus"] = "^0.2.1"
@@ -218,10 +233,6 @@ const createApplication = (name, dir, stage, useIO) => {
     mkdir(dir, 'SocketsApi')
     copyTemplateMulti('SocketsApi', dir + '/SocketsApi', '*.js')
   }
-
-  pm2Config = loadTemplate('pm2.config.js')
-  pm2Config.locals.name = name
-  write(path.join(dir, 'pm2.config.js'), pm2Config.render())
 
   if (stage == 1 || stage == 2) {
     pkg.dependencies["connect-mongo"] = "^2.0.3"
@@ -279,6 +290,7 @@ const createApplication = (name, dir, stage, useIO) => {
   pkg.dependencies = sortedNPM(pkg.dependencies)
 
   write(path.join(dir, 'package.json'), JSON.stringify(pkg, null, 2) + '\n')
+  write(path.join(dir, 'test.js'), pmconfig)
 
   var prompt = launchedFromCmd() ? '>' : '$'
 
