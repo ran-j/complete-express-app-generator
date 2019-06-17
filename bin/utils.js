@@ -206,25 +206,10 @@ const createApplication = (name, dir, stage, useIO) => {
   copyTemplate('gitignore', path.join(dir, '.gitignore'))
   //bin
   copyTemplateMulti('bin', dir + '/bin', '*.js')
-
+  
   var app = null
   var www = null
   var config = null
-
-
-  var pmconfig = `module.exports = {
-    apps : [
-        {
-          name: ${name},
-          script: "./bin/www",
-          watch: true,
-          env: {
-              "PORT": 5000,
-              "NODE_ENV": "production"
-          }
-        }
-    ]
-  }`
  
   if (useIO) {
     pkg.dependencies["socket.io"] = "^2.2.0"
@@ -290,8 +275,7 @@ const createApplication = (name, dir, stage, useIO) => {
   pkg.dependencies = sortedNPM(pkg.dependencies)
 
   write(path.join(dir, 'package.json'), JSON.stringify(pkg, null, 2) + '\n')
-  write(path.join(dir, 'test.js'), pmconfig)
-
+ 
   var prompt = launchedFromCmd() ? '>' : '$'
 
   if (dir !== '.') {
