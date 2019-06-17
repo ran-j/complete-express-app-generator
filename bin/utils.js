@@ -153,7 +153,7 @@ const createApplication = (name, dir, stage, useIO) => {
     private: true,
     scripts: {
       start: 'node ./bin/www',
-      dev : `SET DEBUG=${name}:* & npm start`
+      dev: `SET DEBUG=${name}:* & npm start`
     },
     dependencies: {
       "bcrypt": "^3.0.6",
@@ -219,6 +219,10 @@ const createApplication = (name, dir, stage, useIO) => {
     copyTemplateMulti('SocketsApi', dir + '/SocketsApi', '*.js')
   }
 
+  pm2Config = loadTemplate('pm2.config.js')
+  pm2Config.locals.name = name
+  write(path.join(dir, 'pm2.config.js'), pm2Config.render())
+
   if (stage == 1 || stage == 2) {
     pkg.dependencies["connect-mongo"] = "^2.0.3"
     pkg.dependencies["express-session"] = "^1.15.6"
@@ -231,8 +235,8 @@ const createApplication = (name, dir, stage, useIO) => {
     copyTemplateMulti('Middlewares', dir + '/Middlewares', '*.js')
 
     app = loadTemplate('app.js')
-    www = loadTemplate(stage == 2 ? 'bin/wwwCluster' : 'bin/www')
     config = loadTemplate("bin/config.js")
+    www = loadTemplate(stage == 2 ? 'bin/wwwCluster' : 'bin/www')
 
     app.locals.useIO = useIO
     app.locals.name = name
